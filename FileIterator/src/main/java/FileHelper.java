@@ -73,11 +73,7 @@ public class FileHelper
 
     public static String getFileInfo(final File file)
     {
-        final StringBuilder result = new StringBuilder();
-        result.append(file.isDirectory() ? "Directory " : "File: ");
-        result.append(file.getAbsolutePath());
-        result.append(", size: ");
-        result.append(sizeOf(file));
-        return result.toString();
+        final String type = file.isDirectory() ? "Directory" : "File";
+        return String.format("%s: %s, size: %s", type, file.getAbsolutePath(), sizeOf(file));
     }
 }
