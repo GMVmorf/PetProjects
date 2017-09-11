@@ -1,12 +1,32 @@
-version 'unspecified'
-
+apply plugin: 'maven'
 apply plugin: 'java'
-//apply plugin: 'war'
+apply plugin: 'application'
+apply plugin: 'jacoco'
+group = ''
+description = 'Utils for work with files.'
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 
-repositories {
-    mavenCentral()
+sourceSets {
+    run {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDirs = files('src/main/java')
+        }
+        resources {
+            srcDirs = files('src/main/resources')
+        }
+    }
+}
+
+configurations {
+    runCompile.extendsFrom testCompile
+    runRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -20,4 +40,10 @@ dependencies {
 //    runtime "org.slf4j:slf4j-api:${slf4jVer}"
 //    runtime "org.slf4j:slf4j-log4j12:1.8.0-alpha2"
 //    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.9.0'
+}
+
+run () {
+    mainClassName = "FileHelper"
+    outputs.upToDateWhen { false }
+
 }

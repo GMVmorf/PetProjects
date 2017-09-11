@@ -1,4 +1,3 @@
-
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -7,13 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.lang.invoke.MethodHandles;
 
 import static org.apache.commons.io.FileUtils.listFilesAndDirs;
 import static org.apache.commons.io.FileUtils.sizeOf;
 
 public class FileHelper
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String OS_LINUX = "Linux";
     private static final String OS_WINDOWS = "Windows";
