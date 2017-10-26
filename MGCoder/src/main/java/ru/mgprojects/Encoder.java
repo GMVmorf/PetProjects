@@ -1,7 +1,6 @@
 package ru.mgprojects;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,11 +43,12 @@ public class Encoder
 
     public static void main(String[] args)
     {
-        final String filename = StringUtils.defaultIfEmpty(args[0], DEFAULT_PATH);
+//        final String filename = StringUtils.defaultIfEmpty(args[0], DEFAULT_PATH);
 
-        final String content = readFile(filename);
+//        final String content = readFile(filename);
 
-        writeFile(filename, content, "UTF-8");
+//        writeFile(filename, content, "UTF-8");
+        LOGGER.warn("Current thread: '{}'", Thread.currentThread().getName());
 
     }
 
