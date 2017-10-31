@@ -1,6 +1,7 @@
 package ru.mgprojects;
 
 import io.qameta.allure.Attachment;
+import io.qameta.allure.Step;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,7 @@ public class FileHelperTest
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Test
+    @Step("File info test")
     public void getFileInfo() throws Exception
     {
         LOGGER.info(logIt("First empty test."));

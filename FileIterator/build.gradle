@@ -42,11 +42,13 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.+'
     compile "org.slf4j:slf4j-api:${slf4jVer}"
     compile "org.slf4j:slf4j-simple:${slf4jVer}"
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
     compile "io.qameta.allure:allure-junit4:${allureJUnitVersion}"
-    testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'io.qameta.allure:allure-gradle:2.4'
     compile "io.qameta.allure:allure-junit4:${allureJUnitVersion}"
+    compile "ch.qos.logback:logback-classic:${logbackVersion}"
+    compile "com.codeborne:selenide:${selenideVer}"
+    compile "org.apache.commons:commons-lang3:${lang3Ver}"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 run () {
@@ -62,8 +64,10 @@ apply plugin: 'io.qameta.allure'
 allure {
     version = project.properties.allureVersion
     aspectjweaver = true
-    aspectjVersion = project.properties.aspectjweaverVersion // set explicitly because have to add runtime dependency of same version
-    configuration = 'compile' // need compile to because Allure annotations are used in 'main' source set
+    // set explicitly because have to add runtime dependency of same version
+    aspectjVersion = project.properties.aspectjweaverVersion
+    // need compile to because Allure annotations are used in 'main' source set
+    configuration = 'compile'
     useJUnit4 {
         version = project.properties.allureJUnitVersion
     }
