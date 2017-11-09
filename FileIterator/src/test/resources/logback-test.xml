@@ -13,4 +13,5 @@
         <appender-ref ref="STDOUT" />
         <appender-ref ref="ALLURE" />
     </root>
+    <logger name="com.odin.oa_integration" level="WARN" />
 </configuration>

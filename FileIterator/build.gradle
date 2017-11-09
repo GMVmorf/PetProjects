@@ -4,6 +4,7 @@ apply plugin: 'application'
 apply plugin: 'jacoco'
 group = 'ru.mgprojects'
 description = 'Utils for work with files.'
+version = 1.0
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -36,26 +37,47 @@ sourceSets {
 configurations {
     runCompile.extendsFrom testCompile
     runRuntime.extendsFrom testRuntime
+
+    compile {
+        //transitive = false
+        runtime.exclude group: "org.slf4j", module: "slf4j-log4j12"
+    }
 }
 
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.+'
-    compile "org.slf4j:slf4j-api:${slf4jVer}"
-    compile "org.slf4j:slf4j-simple:${slf4jVer}"
+    compile "com.parallels.autotests:oa-integration:${oaintegrationVer}"
+//    compile "org.slf4j:slf4j-api:${slf4jVer}"
+//    compile "org.slf4j:slf4j-simple:${slf4jVer}"
     compile "io.qameta.allure:allure-junit4:${allureJUnitVersion}"
     compile 'io.qameta.allure:allure-gradle:2.4'
-    compile "io.qameta.allure:allure-junit4:${allureJUnitVersion}"
-    compile "ch.qos.logback:logback-classic:${logbackVersion}"
     compile "com.codeborne:selenide:${selenideVer}"
     compile "org.apache.commons:commons-lang3:${lang3Ver}"
+    testCompile "ch.qos.logback:logback-classic:${logbackVersion}"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
+tasks.withType(Test) {
+    //  6 forks for parallel tests - one fork for one test class
+    maxParallelForks = 6
+}
+
 run () {
+    dependsOn updateChromedriver
+
     mainClassName = "FileHelper"
+    classpath = sourceSets.main.runtimeClasspath
     outputs.upToDateWhen { false }
 
+    systemProperty "webdriver.path", findProperty("webdriver.path") ?: "${updateChromedriver.driverLocation}"
 }
+
+task testJar(type: Jar) {
+    from sourceSets.test.output
+    version = "${rootProject.version}-${-> rootProject.buildNumber.value}"
+    classifier = 'test'
+}
+artifacts.archives e2eJar
 
 //region Allure reporting
 // plugin creates tasks in afterEvaluate handler, so configuring these tasks must be in same handler too
@@ -81,3 +103,24 @@ afterEvaluate {
     tasks.run.finalizedBy(allureReport)
 }
 //endregion
+
+sonarqube {
+    properties {
+        properties["sonar.sources"] += sourceSets.e2eTest.java.srcDirs
+        properties["sonar.java.binaries"] += sourceSets.e2eTest.output.classesDir
+        properties["sonar.coverage.exclusions"] = '**'
+        properties["sonar.issue.ignore.multicriteria"] = 'e1,e2,e3,e4'
+        // IP addresses should not be hardcoded
+        properties["sonar.issue.ignore.multicriteria.e1.ruleKey"] = 'squid:S1313'
+        properties["sonar.issue.ignore.multicriteria.e1.resourceKey"] = '**'
+        // Credentials should not be hard-coded
+        properties["sonar.issue.ignore.multicriteria.e2.ruleKey"] = 'squid:S2068'
+        properties["sonar.issue.ignore.multicriteria.e2.resourceKey"] = '**'
+        // Public methods should throw at most one checked exception
+        properties["sonar.issue.ignore.multicriteria.e3.ruleKey"] = 'squid:S1160'
+        properties["sonar.issue.ignore.multicriteria.e3.resourceKey"] = '**'
+        // Methods should not be too complex
+        properties["sonar.issue.ignore.multicriteria.e4.ruleKey"] = 'squid:MethodCyclomaticComplexity'
+        properties["sonar.issue.ignore.multicriteria.e4.resourceKey"] = '**'
+    }
+}

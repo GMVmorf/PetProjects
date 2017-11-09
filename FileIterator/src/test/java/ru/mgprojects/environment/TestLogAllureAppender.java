@@ -13,7 +13,7 @@ public class TestLogAllureAppender<E> extends OutputStreamAppender<E> {
 
     @Override
     public void start() {
-        OutputStream targetStream = new OutputStream() {
+        final OutputStream targetStream = new OutputStream() {
             @Override
             public void write(int b) {
                 stream.get().write(b);

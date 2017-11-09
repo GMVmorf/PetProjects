@@ -1,0 +1,11 @@
+configurations.all {
+//    runtime.exclude group: "org.slf4j", module: "slf4j-log4j12"
+//    runtime.exclude group: "ch.qos.logback", module: "logback-classic"
+//    test.exclude group: "ch.qos.logback", module: "logback-classic"
+//    test.exclude group: "org.slf4j", module: "slf4j-log4j12"
+//    all*.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+    compile(project(":FileIterator")) {
+        transitive = false
+    }
+}
+
