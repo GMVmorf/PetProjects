@@ -2,6 +2,8 @@ apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'jacoco'
+apply plugin: "eu.leontebbens.gradle.chromedriver-updater"
+apply plugin: 'org.sonarqube'
 group = 'ru.mgprojects'
 description = 'Utils for work with files.'
 version = 1.0
@@ -18,6 +20,9 @@ buildscript {
     }
     dependencies {
         classpath "io.qameta.allure:allure-gradle:2.4"
+        classpath "gradle.plugin.eu.leontebbens.gradle:chromedriver-updater-plugin:1.6"
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5'
+
     }
 }
 
@@ -46,7 +51,6 @@ configurations {
 
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.+'
-    compile "com.parallels.autotests:oa-integration:${oaintegrationVer}"
 //    compile "org.slf4j:slf4j-api:${slf4jVer}"
 //    compile "org.slf4j:slf4j-simple:${slf4jVer}"
     compile "io.qameta.allure:allure-junit4:${allureJUnitVersion}"
@@ -55,6 +59,7 @@ dependencies {
     compile "org.apache.commons:commons-lang3:${lang3Ver}"
     testCompile "ch.qos.logback:logback-classic:${logbackVersion}"
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.mockito:mockito-core:${mockitoVer}"
 }
 
 tasks.withType(Test) {
@@ -77,7 +82,7 @@ task testJar(type: Jar) {
     version = "${rootProject.version}-${-> rootProject.buildNumber.value}"
     classifier = 'test'
 }
-artifacts.archives e2eJar
+artifacts.archives testJar
 
 //region Allure reporting
 // plugin creates tasks in afterEvaluate handler, so configuring these tasks must be in same handler too

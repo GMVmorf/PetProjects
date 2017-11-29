@@ -17,6 +17,8 @@ public class FileHelperTest
 {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
+    static int i;
+
     @Rule
     public final TestRule x = RuleChain.outerRule(new TestLogCatcherRule());
 
@@ -24,17 +26,12 @@ public class FileHelperTest
     @Step("File info test")
     public void getFileInfo() throws Exception
     {
-        LOGGER.info("Session ID = '{}'", StringUtils.substringBetween("SESSION_ID=1d9fddda-8476-497b-b3e0-f060efc5f2ef; SESSION_ID=21a4ba5a-c47a-4805-aec7-3b050fe733c9;;;;", "SESSION_ID=", ";"));
-//        TestSetParameters.init("10.63.63.40", "root", "1q2w3e");
-        LOGGER.info("First empty test.");
+        final String baseString = "[JSESSIONID=H-Fwy4nc0AROw2IA6803vHUBpHDMugl7J02pXVjI.localhost; path=/; HttpOnly, device-tag=YXp1cmUyMDE3MTEwOTE5MzkyNUBHeFJqZWRvbWFpbi5lMmVcL77FlsoIzJGxD1Ha0uf2%2FM%2BE%2Brs1LCmvSyHpqFt5pXdhppy8MbgY; path=/; secure; HttpOnly; Max-Age=15552000; Expires=Wed, 09-May-2018 06:32:47 GMT]";
+        LOGGER.info(String.format("%s", StringUtils.substringBetween(baseString, "JSESSIONID", ";")));
+        LOGGER.info(String.format("%s", StringUtils.substringBetween(baseString, "device-tag", ";")));
+
 //        screenshot("First screenshot");
         assertTrue(true);
     }
-
-//    @Attachment
-//    public String logIt(final String logMessage)
-//    {
-//        return logMessage;
-//    }
 
 }
