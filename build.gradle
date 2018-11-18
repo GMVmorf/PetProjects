@@ -2,42 +2,45 @@ group = 'ru.mgprojects'
 description = 'Pet projects.'
 version = "1.0"
 
+//apply from: "$rootDir/libraries.gradle"
 //  try to use task `Test` parameter `maxParallelForks = 6` if any
 //org.gradle.parallel = true
 
 //region buildscript
 buildscript {
     repositories {
-        maven { url 'https://plugins.gradle.org/m2/' }
         jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
         mavenCentral()
     }
 
-    dependencies {
-        classpath versions["gradleBundlePlugin"]
-        classpath versions["buildInfoExtractorGradleVersion"]
+    //region Read version information from local file and increment as appropriate
+    ext.getLibraries = { ->
+        def libraries = new Properties()
+        file("libraries.properties").withInputStream { libraries.load(it) }
+        libraries.each { k, v -> libraries[k] = v.replace("\"", "") }
+        return libraries
+    }
+    //endregion
 
-        classpath versions["kotlinAllopen"]
-        classpath versions["kotlinNoarg"]
-        classpath versions["kotlinGradlePlugin"]
-        
-        classpath versions["gradleBundlePlugin"]
+    def dependenciesLibraries = project.getLibraries()
+    dependencies {
+        classpath dependenciesLibraries["gradleBundlePlugin"]
+        classpath dependenciesLibraries["buildInfoExtractorGradleVersion"]
+        classpath dependenciesLibraries["kotlinAllopen"]
+        classpath dependenciesLibraries["kotlinNoarg"]
+        classpath dependenciesLibraries["kotlinGradlePlugin"]
     }
 }
 //endregion
+
+//  All libraries
+def libraries = getLibraries()
 
 //region  Compatibility properties
 allprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
-
-    sourceCompatibility = versions["jvmVersion"]
-    targetCompatibility = versions["jvmVersion"]
-}
-
-subprojects {
-
-    jar.enabled = true
 
     repositories {
 //        mavenLocal()
@@ -45,23 +48,34 @@ subprojects {
         mavenCentral()
     }
 
+    sourceCompatibility = libraries["jvmVersion"]
+    targetCompatibility = libraries["jvmVersion"]
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+}
+//endregion
+
+//region Subprojects
+subprojects {
+    jar.enabled = true
+
     dependencies {
-        compile libraries.kotlin_stdlib
-        compile libraries.kotlin_reflect
+        compile libraries["kotlinStdlib"]
+        compile libraries["kotlinReflect"]
 
-        testCompile(libraries.spring_boot_starter_test) {
-            exclude module: 'junit'
-        }
+        testCompile libraries["junit5engine"]
+        testCompile libraries["junit5api"]
+        testCompile libraries["junit5params"]
 
-        testCompile libraries.junit5_engine
-        testCompile libraries.mockito_kotlin
-        testCompile libraries.mockk
-        testCompile libraries.assertj_core
+        testCompile libraries["mockitoKotlin"]
+        testCompile libraries["mockk"]
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
-            jvmTarget = "${jvmVersion}"
+            jvmTarget = libraries["jvmVersion"]
             javaParameters = true
         }
     }
@@ -77,7 +91,4 @@ subprojects {
 
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
 //endregion
