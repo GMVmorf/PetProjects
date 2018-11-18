@@ -1,4 +1,6 @@
-include 'MGCoder'
-include 'FileIterator'
-include 'Benchmarks'
+//include 'MGCoder'
+//include 'FileIterator'
+//include 'Benchmarks'
+//include 'helloKotlin'
+include 'DataClassUtils'
 

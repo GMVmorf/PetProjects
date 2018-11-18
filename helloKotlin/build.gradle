@@ -1,0 +1,29 @@
+group 'ru.mgprojects'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+    }
+}
+
+//tasks.withType(KotlinCompile) {
+//    kotlinOptions {
+//        jvmTarget = "1.8"
+//    }
+//}
+
+mainClassName = "ru.mgprojects.Hello"
+
+dependencies {
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    compile("org.jetbrains.kotlin:kotlin-reflect")
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}

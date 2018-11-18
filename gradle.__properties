@@ -1,0 +1,11 @@
+aspectjweaverVersion = 1.8.10
+buildInfoExtractorGradleVersion = 4.8.1
+gradleBundlePlugin = 0.10.0
+jvmVersion = 1.8
+kotlinVersion = 1.3.0
+logbackVersion = 1.2.3
+lang3Ver = 3.5
+mockitoVer = 1.+
+slf4jVer = 1.7.7
+
+buildNumber=

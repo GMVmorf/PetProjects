@@ -18,9 +18,10 @@ buildscript {
     repositories {
         jcenter()
     }
+
     dependencies {
         classpath "io.qameta.allure:allure-gradle:2.4"
-        classpath "gradle.plugin.eu.leontebbens.gradle:chromedriver-updater-plugin:1.6"
+        classpath "eu.leontebbens.gradle:chromedriver-updater-plugin:1.1"
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5'
 
     }
@@ -57,7 +58,7 @@ dependencies {
     compile 'io.qameta.allure:allure-gradle:2.4'
     compile "com.codeborne:selenide:${selenideVer}"
     compile "org.apache.commons:commons-lang3:${lang3Ver}"
-    testCompile "ch.qos.logback:logback-classic:${logbackVersion}"
+    testCompile versions["logbackVersion"]
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile "org.mockito:mockito-core:${mockitoVer}"
 }
@@ -74,7 +75,7 @@ run () {
     classpath = sourceSets.main.runtimeClasspath
     outputs.upToDateWhen { false }
 
-    systemProperty "webdriver.path", findProperty("webdriver.path") ?: "${updateChromedriver.driverLocation}"
+//    systemProperty "webdriver.path", findProperty("webdriver.path") ?: "${updateChromedriver.driverLocation}"
 }
 
 task testJar(type: Jar) {
