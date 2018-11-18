@@ -5,10 +5,19 @@ dependencies {
 //    testCompile versions["mockk"]
 }
 
-tasks.withType(Test) {
-    //  6 forks for parallel tests - one fork for one test class
-    maxParallelForks = 6
+//tasks.withType(Test) {
+//    //  6 forks for parallel tests - one fork for one test class
+//    maxParallelForks = 6
+//}
+
+task jarTest (type: Jar, dependsOn: testClasses) {
+    from sourceSets.test.output
+    classifier = 'test'
 }
+
+//artifacts {
+//    testOutput jarTest
+//}
 
 //task testJar(type: Jar) {
 //    from sourceSets.test.output

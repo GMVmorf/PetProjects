@@ -9,16 +9,16 @@ version = "1.0"
 //region buildscript
 buildscript {
     repositories {
-        jcenter()
-        maven { url 'https://plugins.gradle.org/m2/' }
         mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        jcenter()
     }
 
     //region Read version information from local file and increment as appropriate
     ext.getLibraries = { ->
         def libraries = new Properties()
         file("libraries.properties").withInputStream { libraries.load(it) }
-        libraries.each { k, v -> libraries[k] = v.replace("\"", "") }
+        libraries.each { k, v -> libraries[k] = v.replace("\"", "").trim() }
         return libraries
     }
     //endregion
@@ -44,8 +44,9 @@ allprojects {
 
     repositories {
 //        mavenLocal()
-        jcenter()
         mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        jcenter()
     }
 
     sourceCompatibility = libraries["jvmVersion"]
@@ -64,7 +65,11 @@ subprojects {
     dependencies {
         compile libraries["kotlinStdlib"]
         compile libraries["kotlinReflect"]
-
+//
+//        testCompile() {
+//            exclude module: 'junit'
+//        }
+        
         testCompile libraries["junit5engine"]
         testCompile libraries["junit5api"]
         testCompile libraries["junit5params"]
