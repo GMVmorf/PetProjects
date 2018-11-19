@@ -2,6 +2,7 @@ package ru.mgprojects
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import java.sql.Date
 
 class DataClassCreatorTest {
 
@@ -21,13 +22,38 @@ class DataClassCreatorTest {
         }
         val dataClassCreator = DataClassCreator()
 
-        var actual = dataClassCreator.createDtoFromDataClass(InnerData.SecondLevelData::class.java)
-        actual = dataClassCreator.createDtoFromDataClass(InnerData::class.java)
+        var actual : String? = null
+//        actual = dataClassCreator.createDtoFromDataClass(InnerData.SecondLevelData::class.java)
+//        actual = dataClassCreator.createDtoFromDataClass(InnerData::class.java)
 //        actual = dataClassCreator.createDtoFromDataClass(MySuperData::class.java)
-//        clazz.simpleName + "_" + clazz.typeName + "_" + clazz.getName() + "_" + clazz.typeName
-        assertEquals(actual, "")
+        actual = dataClassCreator.createDtoFromDataClass(DataClassCreator::class.java)
+
+
+//region Comment: results of clazz.simpleName + "_" + clazz.typeName + "_" + clazz.getName() + "_" + clazz.typeName
+
+//        InnerData.SecondLevelData
+//        clazz.simpleName -    SecondLevelData
+//        clazz.typeName -      ru.mgprojects.DataClassCreatorTest$createDtoFromDataClass$InnerData$SecondLevelData
+//        clazz.name -          ru.mgprojects.DataClassCreatorTest$createDtoFromDataClass$InnerData$SecondLevelData
+//        clazz.typeName -      null
+
+//        InnerData
+//        clazz.simpleName -    createDtoFromDataClass$InnerData
+//        clazz.typeName -      ru.mgprojects.DataClassCreatorTest$createDtoFromDataClass$InnerData
+//        clazz.name -          ru.mgprojects.DataClassCreatorTest$createDtoFromDataClass$InnerData
+//        clazz.typeName -      ru.mgprojects.DataClassCreatorTest$createDtoFromDataClass$InnerData
+
+//        MySuperData
+//        clazz.simpleName -    MySuperData
+//        clazz.typeName -      ru.mgprojects.MySuperData
+//        clazz.name -          ru.mgprojects.MySuperData
+//        clazz.typeName -      ru.mgprojects.MySuperData
+//endregion
+        println (actual)
         assertTrue(true)
     }
 }
 
-data class MySuperData(val id: Long)
+data class MySuperData(val id: Long, val struct: Struct)
+
+data class Struct(val id: Long, val name: String, val date: Date)
